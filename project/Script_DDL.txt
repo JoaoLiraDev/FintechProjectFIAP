@@ -1,0 +1,134 @@
+-- Gerado por Oracle SQL Developer Data Modeler 22.2.0.165.1149
+--   em:        2022-11-02 13:07:28 BRT
+--   site:      Oracle Database 11g
+--   tipo:      Oracle Database 11g
+--   author:    Joao Lira
+
+
+
+-- predefined type, no DDL - MDSYS.SDO_GEOMETRY
+
+-- predefined type, no DDL - XMLTYPE
+
+CREATE TABLE t_sof_categoria (
+    id_categoria                   NVARCHAR2(36) NOT NULL,
+    nm_categoria                   CHAR(30) NOT NULL,
+    t_sof_mov_id_movimentacao      NVARCHAR2(36) NOT NULL,
+    t_sof_mov_t_sof_conta_id_conta NVARCHAR2(36) NOT NULL
+);
+
+CREATE UNIQUE INDEX t_sof_categoria__idx ON
+    t_sof_categoria (
+        t_sof_mov_id_movimentacao
+    ASC,
+        t_sof_mov_t_sof_conta_id_conta
+    ASC );
+
+ALTER TABLE t_sof_categoria ADD CONSTRAINT t_sof_categoria_pk PRIMARY KEY ( id_categoria );
+
+CREATE TABLE t_sof_cliente (
+    id_cliente           NVARCHAR2(36) NOT NULL,
+    nm_cliente           CHAR(120) NOT NULL,
+    ds_email             NVARCHAR2(180) NOT NULL,
+    ds_password          NVARCHAR2(500) NOT NULL,
+    dt_nascimento        DATE NOT NULL,
+    nr_telefone          NVARCHAR2(20),
+    dt_criacao           DATE,
+    dt_atualizacao       DATE,
+    t_sof_conta_id_conta NVARCHAR2(36) NOT NULL
+);
+
+CREATE UNIQUE INDEX t_sof_cliente__idx ON
+    t_sof_cliente (
+        t_sof_conta_id_conta
+    ASC );
+
+ALTER TABLE t_sof_cliente ADD CONSTRAINT t_sof_cliente_pk PRIMARY KEY ( id_cliente );
+
+CREATE TABLE t_sof_conta (
+    id_conta                 NVARCHAR2(36) NOT NULL,
+    nm_conta                 CHAR(30) NOT NULL,
+    t_sof_cliente_id_cliente NVARCHAR2(36) NOT NULL
+);
+
+CREATE UNIQUE INDEX t_sof_conta__idx ON
+    t_sof_conta (
+        t_sof_cliente_id_cliente
+    ASC );
+
+ALTER TABLE t_sof_conta ADD CONSTRAINT t_sof_conta_pk PRIMARY KEY ( id_conta );
+
+CREATE TABLE t_sof_movimentacoes (
+    id_movimentacao      NVARCHAR2(36) NOT NULL,
+    in_tipo              CHAR(30) NOT NULL,
+    ds_descricao         NVARCHAR2(300) NOT NULL,
+    dt_vigencia          DATE NOT NULL,
+    vl_movimentacao      FLOAT NOT NULL,
+    t_sof_conta_id_conta NVARCHAR2(36) NOT NULL
+);
+
+ALTER TABLE t_sof_movimentacoes ADD CONSTRAINT t_sof_mov_pk PRIMARY KEY ( id_movimentacao,
+                                                                          t_sof_conta_id_conta );
+
+ALTER TABLE t_sof_categoria
+    ADD CONSTRAINT t_sof_categ_t_sof_mov_fk FOREIGN KEY ( t_sof_mov_id_movimentacao,
+                                                          t_sof_mov_t_sof_conta_id_conta )
+        REFERENCES t_sof_movimentacoes ( id_movimentacao,
+                                         t_sof_conta_id_conta );
+
+ALTER TABLE t_sof_cliente
+    ADD CONSTRAINT t_sof_cliente_t_sof_conta_fk FOREIGN KEY ( t_sof_conta_id_conta )
+        REFERENCES t_sof_conta ( id_conta );
+
+ALTER TABLE t_sof_conta
+    ADD CONSTRAINT t_sof_conta_t_sof_cliente_fk FOREIGN KEY ( t_sof_cliente_id_cliente )
+        REFERENCES t_sof_cliente ( id_cliente );
+
+ALTER TABLE t_sof_movimentacoes
+    ADD CONSTRAINT t_sof_movi_t_sof_conta_fk FOREIGN KEY ( t_sof_conta_id_conta )
+        REFERENCES t_sof_conta ( id_conta );
+
+
+
+-- Relat�rio do Resumo do Oracle SQL Developer Data Modeler: 
+-- 
+-- CREATE TABLE                             4
+-- CREATE INDEX                             3
+-- ALTER TABLE                              8
+-- CREATE VIEW                              0
+-- ALTER VIEW                               0
+-- CREATE PACKAGE                           0
+-- CREATE PACKAGE BODY                      0
+-- CREATE PROCEDURE                         0
+-- CREATE FUNCTION                          0
+-- CREATE TRIGGER                           0
+-- ALTER TRIGGER                            0
+-- CREATE COLLECTION TYPE                   0
+-- CREATE STRUCTURED TYPE                   0
+-- CREATE STRUCTURED TYPE BODY              0
+-- CREATE CLUSTER                           0
+-- CREATE CONTEXT                           0
+-- CREATE DATABASE                          0
+-- CREATE DIMENSION                         0
+-- CREATE DIRECTORY                         0
+-- CREATE DISK GROUP                        0
+-- CREATE ROLE                              0
+-- CREATE ROLLBACK SEGMENT                  0
+-- CREATE SEQUENCE                          0
+-- CREATE MATERIALIZED VIEW                 0
+-- CREATE MATERIALIZED VIEW LOG             0
+-- CREATE SYNONYM                           0
+-- CREATE TABLESPACE                        0
+-- CREATE USER                              0
+-- 
+-- DROP TABLESPACE                          0
+-- DROP DATABASE                            0
+-- 
+-- REDACTION POLICY                         0
+-- 
+-- ORDS DROP SCHEMA                         0
+-- ORDS ENABLE SCHEMA                       0
+-- ORDS ENABLE OBJECT                       0
+-- 
+-- ERRORS                                   0
+-- WARNINGS                                 0
