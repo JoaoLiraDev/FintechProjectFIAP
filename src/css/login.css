@@ -91,6 +91,11 @@ body {
     border-radius: 9px;
 }
 
+.login-form > .btn-login > a {
+    text-decoration: none;
+    color: #fff;
+}
+
 @media only screen and (min-width: 769px) {
     .header {
         margin-top: 3%;
@@ -123,4 +128,4 @@ body {
     .login-form > .password {
         width: unset;
     }
-  }
+}
